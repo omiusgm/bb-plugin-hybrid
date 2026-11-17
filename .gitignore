@@ -1,0 +1,11 @@
+node_modules/
+dist/
+_tmp/
+_работа/
+verification/
+.env
+.env.*
+.claude/
+.codex/
+.agents/
+.DS_Store

@@ -1,0 +1,152 @@
+/* Who writes to whom. Four looks: my message, my agent's speech, a message that
+   came from another thread, a message that went to another thread. Every rule
+   is gated by :root[data-hyb-active]; a foreign palette sees none of it.
+   Icons are bb's own (provider icon and Icon portalled into empty slots by
+   app.tsx); this file only sizes, colours and places them. */
+:root[data-hyb-active] {
+  --hyb-mark-size: 22px;
+  --hyb-mark-gutter: 36px;
+}
+:root[data-hyb-active] [data-hyb-kind="inbound"],
+:root[data-hyb-active] [data-hyb-kind="tell"] { --hyb-color: var(--hyb-tell); }
+:root[data-hyb-active] [data-hyb-kind="child"] { --hyb-color: color-mix(in srgb, var(--hyb-delegate) 60%, var(--border)); }
+:root[data-hyb-active][data-hyb-colorcode="false"] [data-hyb-kind="inbound"],
+:root[data-hyb-active][data-hyb-colorcode="false"] [data-hyb-kind="tell"],
+:root[data-hyb-active][data-hyb-colorcode="false"] [data-hyb-kind="child"] { --hyb-color: var(--hyb-rail-neutral); }
+
+/* ── Slots: an empty span until bb's icon is portalled in. ── */
+:root[data-hyb-active] [data-hyb-slot] {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  box-sizing: border-box; line-height: 1;
+}
+:root[data-hyb-active] [data-hyb-slot][data-hyb-slot-empty] { display: none; }
+:root[data-hyb-active] [data-hyb-slot] svg { width: 100%; height: 100%; }
+
+/* Author mark: a round badge carrying the provider's own logo. */
+:root[data-hyb-active] [data-hyb-slot="agent"] {
+  width: var(--hyb-mark-size); height: var(--hyb-mark-size); border-radius: 50%;
+  background: var(--card); border: 1px solid var(--border); color: var(--readback-foreground);
+  position: relative;
+}
+:root[data-hyb-active] [data-hyb-slot="agent"] > * {
+  width: 13px; height: 13px; min-width: 0; min-height: 0; display: inline-flex;
+  align-items: center; justify-content: center;
+}
+
+/* Direction arrow. One native glyph; "incoming" is the same arrow turned round. */
+:root[data-hyb-active] [data-hyb-slot="arrow"] {
+  width: 16px; height: 16px; color: var(--hyb-color);
+}
+:root[data-hyb-active] [data-hyb-slot="arrow"][data-hyb-dir="in"] { rotate: 180deg; }
+
+/* ── 1. My agent's speech: the mark sits in a gutter to the left of the block. ── */
+:root[data-hyb-active][data-hyb-marks="true"] [data-hyb-layer="assistant"] {
+  --hyb-rail: 1px;
+}
+:root[data-hyb-active][data-hyb-marks="true"] [data-hyb-layer="assistant"][data-hyb-current] { --hyb-rail: 2px; }
+:root[data-hyb-active][data-hyb-marks="true"][data-hyb-final="true"] [data-hyb-layer="assistant"][data-hyb-final] { --hyb-rail: 3px; }
+:root[data-hyb-active][data-hyb-marks="true"] [data-hyb-layer="assistant"]:has(> [data-hyb-slot="agent"]:not([data-hyb-slot-empty])) {
+  position: relative; margin-inline-start: var(--hyb-mark-gutter);
+}
+:root[data-hyb-active][data-hyb-marks="true"] [data-hyb-layer="assistant"] > [data-hyb-slot="agent"] {
+  position: absolute; top: 1px;
+  inset-inline-start: calc(-1 * (var(--hyb-mark-gutter) + var(--hyb-rail)));
+}
+:root[data-hyb-active][data-hyb-marks="true"][data-hyb-final="true"] [data-hyb-layer="assistant"][data-hyb-final] > [data-hyb-slot="agent"] {
+  top: 12px;
+}
+
+/* ── 5. Work indicator: one quiet ring, only on the mark of the answer being
+   written now. Finished blocks never animate. ── */
+:root[data-hyb-active][data-hyb-marks="true"] [data-hyb-layer="assistant"][data-hyb-current] > [data-hyb-slot="agent"]::after {
+  content: ""; position: absolute; inset: -3px; border-radius: 50%; pointer-events: none;
+  border: 1.5px solid color-mix(in srgb, var(--hyb-state-working) 70%, transparent);
+  animation: hyb-mark-ring 2.4s ease-out infinite;
+}
+@keyframes hyb-mark-ring {
+  0% { opacity: .85; transform: scale(.92); }
+  70%, 100% { opacity: 0; transform: scale(1.35); }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* No motion at all; the static ring still says "being written now". */
+  :root[data-hyb-active][data-hyb-marks="true"] [data-hyb-layer="assistant"][data-hyb-current] > [data-hyb-slot="agent"]::after {
+    animation: none; opacity: .8; transform: none;
+  }
+}
+
+/* ── 2. Came from another thread ("Message from <thread>"). ── */
+:root[data-hyb-active] [data-hyb-layer="inbound"],
+:root[data-hyb-active] [data-hyb-layer="child"] {
+  border: 1px solid var(--border-hairline); border-inline-start: 3px solid var(--hyb-color);
+  border-radius: var(--radius); background: var(--card); min-width: 0; margin-block: 2px;
+}
+:root[data-hyb-active][data-hyb-rails="false"] [data-hyb-layer="inbound"],
+:root[data-hyb-active][data-hyb-rails="false"] [data-hyb-layer="child"] { border-inline-start: 1px solid var(--border-hairline); }
+:root[data-hyb-active] [data-hyb-layer="inbound"] { padding: 3px 8px; }
+:root[data-hyb-active] [data-hyb-layer="inbound"] > div > div > button,
+:root[data-hyb-active] [data-hyb-layer="inbound"] > div > div > div:first-child { align-items: center; gap: 7px; min-height: 28px; }
+/* The arrow says "incoming"; the native speech-bubble icon would repeat it. */
+:root[data-hyb-active] [data-hyb-layer="inbound"] svg[data-icon="MessageSquare"] { display: none; }
+:root[data-hyb-active] [data-hyb-layer="inbound"] a[data-prompt-mention] {
+  color: var(--hyb-color); font-weight: 600; font-size: 12px; line-height: 18px;
+  border-color: color-mix(in srgb, var(--hyb-color) 45%, var(--border));
+  background: color-mix(in srgb, var(--hyb-color) 9%, var(--card));
+  text-decoration: underline; text-underline-offset: 2px; padding-block: 1px;
+}
+:root[data-hyb-active] [data-hyb-layer="inbound"] a[data-prompt-mention] svg { display: none; }
+:root[data-hyb-active] [data-hyb-layer="inbound"] a[data-prompt-mention]:hover { background: var(--state-hover); }
+
+/* ── 3. Went to another thread: the existing "tell" action row gets the mirrored arrow. ── */
+:root[data-hyb-active] [data-hyb-kind="tell"] [data-hyb-header] { gap: 6px; }
+/* bb's own "Sent to <thread>" row: our arrow replaces the paper-plane icon so
+   in and out read as one mirrored pair; the thread pill is as prominent as on
+   the incoming block. */
+:root[data-hyb-active] [data-hyb-kind="tell"] svg[data-icon="Sent"] { display: none; }
+/* A message to another thread is not "work": finished-turn muting (app.css)
+   must not grey its rail or dim its header. Higher specificity, same file scope. */
+:root[data-hyb-active][data-hyb-quiet="true"] [data-hyb-quiet][data-hyb-kind="tell"] {
+  border-color: var(--border-hairline); border-inline-start-color: var(--hyb-color);
+}
+:root[data-hyb-active][data-hyb-quiet="true"] [data-hyb-quiet][data-hyb-kind="tell"] [data-hyb-header] { opacity: 1; }
+:root[data-hyb-active] [data-hyb-kind="tell"] a[data-prompt-mention] {
+  color: var(--hyb-color); font-weight: 600; font-size: 12px; line-height: 18px;
+  border-color: color-mix(in srgb, var(--hyb-color) 45%, var(--border));
+  background: color-mix(in srgb, var(--hyb-color) 9%, var(--card));
+  text-decoration: underline; text-underline-offset: 2px; padding-block: 1px;
+}
+:root[data-hyb-active] [data-hyb-kind="tell"] a[data-prompt-mention] svg { display: none; }
+:root[data-hyb-active] [data-hyb-kind="tell"] a[data-prompt-mention]:hover { background: var(--state-hover); }
+:root[data-hyb-active] [data-hyb-kind="tell"] [data-hyb-slot="agent"] { width: 18px; height: 18px; }
+:root[data-hyb-active] [data-hyb-kind="tell"] [data-hyb-slot="agent"] > * { width: 11px; height: 11px; }
+
+/* ── 4. Child-thread system lines: calm rail, the child agent's mark. ── */
+:root[data-hyb-active] [data-hyb-layer="child"] { padding: 2px 8px; border-inline-start-width: 2px; background: transparent; }
+:root[data-hyb-active] [data-hyb-layer="child"] > div > div > div:first-child,
+:root[data-hyb-active] [data-hyb-layer="child"] > div > div > button { align-items: center; gap: 7px; min-height: 24px; }
+:root[data-hyb-active] [data-hyb-layer="child"] [data-hyb-slot="agent"],
+:root[data-hyb-active] [data-hyb-layer="inbound"] [data-hyb-slot="agent"] { width: 18px; height: 18px; }
+:root[data-hyb-active] [data-hyb-layer="child"] [data-hyb-slot="agent"] > *,
+:root[data-hyb-active] [data-hyb-layer="inbound"] [data-hyb-slot="agent"] > * { width: 11px; height: 11px; }
+:root[data-hyb-active] [data-hyb-layer="child"] a[href] { opacity: 1; color: var(--foreground); }
+
+/* Wide content (tables, long pre, images) must not leave any of our blocks.
+   bb lets a table wrapper bleed out of the prose column with a negative
+   margin; inside a rail or a gutter mark that overlaps the rail and the mark.
+   app.css covers final/current answers (its `speech` layer does not exist in
+   the DOM); plain speech and the two thread-event blocks are covered here. */
+:root[data-hyb-active] [data-hyb-layer="assistant"],
+:root[data-hyb-active] [data-hyb-layer="inbound"],
+:root[data-hyb-active] [data-hyb-layer="child"] { min-width: 0; }
+:root[data-hyb-active] [data-hyb-layer="assistant"] [data-markdown-preview],
+:root[data-hyb-active] [data-hyb-layer="inbound"] [data-markdown-preview],
+:root[data-hyb-active] [data-hyb-layer="child"] [data-markdown-preview] { min-width: 0; max-width: 100%; }
+:root[data-hyb-active] [data-hyb-layer="assistant"] [data-markdown-preview] > *,
+:root[data-hyb-active] [data-hyb-layer="inbound"] [data-markdown-preview] > *,
+:root[data-hyb-active] [data-hyb-layer="child"] [data-markdown-preview] > * { margin-inline: 0 !important; max-width: 100% !important; }
+:root[data-hyb-active] [data-hyb-layer="assistant"] [data-markdown-preview] pre,
+:root[data-hyb-active] [data-hyb-layer="inbound"] [data-markdown-preview] pre,
+:root[data-hyb-active] [data-hyb-layer="child"] [data-markdown-preview] pre { max-width: 100%; overflow-x: auto; }
+:root[data-hyb-active] [data-hyb-slot="agent"] { z-index: 1; }
+
+:root[data-hyb-active][data-hyb-density="compact"] [data-hyb-layer="inbound"] { padding-block: 1px; }
+:root[data-hyb-active][data-hyb-density="compact"] [data-hyb-layer="child"] { padding-block: 0; }

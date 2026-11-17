@@ -1,0 +1,232 @@
+/* Every structural rule is gated. Foreign palettes keep native BB untouched. */
+:root[data-hyb-active] {
+  --hyb-rail-neutral: var(--readback-foreground);
+}
+:root[data-hyb-active] [data-hyb-kind] { --hyb-color: var(--hyb-rail-neutral); }
+:root[data-hyb-active] [data-hyb-kind="think"] { --hyb-color: var(--hyb-think); }
+:root[data-hyb-active] [data-hyb-kind="read"] { --hyb-color: var(--hyb-read); }
+:root[data-hyb-active] [data-hyb-kind="edit"],
+:root[data-hyb-active] [data-hyb-kind="git"] { --hyb-color: var(--hyb-edit); }
+:root[data-hyb-active] [data-hyb-kind="run"],
+:root[data-hyb-active] [data-hyb-kind="prepare"] { --hyb-color: var(--hyb-run); }
+:root[data-hyb-active] [data-hyb-kind="net"] { --hyb-color: var(--hyb-net); }
+:root[data-hyb-active] [data-hyb-kind="delegate"] { --hyb-color: var(--hyb-delegate); }
+:root[data-hyb-active] [data-hyb-kind="tell"] { --hyb-color: var(--hyb-tell); }
+:root[data-hyb-active] [data-hyb-kind="task"] { --hyb-color: var(--hyb-task); }
+:root[data-hyb-active] [data-hyb-kind="attention"] { --hyb-color: var(--hyb-attention); }
+:root[data-hyb-active] [data-hyb-kind="error"] { --hyb-color: var(--hyb-error); }
+:root[data-hyb-active][data-hyb-colorcode="false"] [data-hyb-kind] { --hyb-color: var(--hyb-rail-neutral); }
+:root[data-hyb-active] [data-timeline-row-list="top-level"] { row-gap: 10px; }
+:root[data-hyb-active] [data-timeline-row-list="bundle"] { row-gap: 4px; }
+:root[data-hyb-active] [data-hyb-layer="user"] {
+  background: var(--secondary); border-inline-start: 3px solid var(--primary);
+  border-radius: 0 var(--radius) var(--radius) 0; padding: 10px 12px;
+}
+:root[data-hyb-active] [data-hyb-layer="assistant"] {
+  background: transparent; border-inline-start: 1px solid var(--border);
+  padding-inline-start: 12px; margin-block: 8px;
+}
+:root[data-hyb-active] [data-hyb-current] {
+  border-inline-start: 2px solid var(--readback-foreground); padding-inline-start: 11px;
+}
+:root[data-hyb-active] [data-hyb-current-label] {
+  margin-block-end: 6px; color: var(--readback-foreground); font: 600 11px/16px var(--font-sans);
+}
+:root[data-hyb-active][data-hyb-final="true"] [data-hyb-final] {
+  margin-block-start: 20px; padding: 12px 14px 8px;
+  border: 1px solid var(--border); border-inline-start: 3px solid var(--primary);
+  border-radius: var(--radius); background: var(--surface-raised);
+  box-shadow: 0 3px 12px color-mix(in srgb, var(--hyb-neutral) 5%, transparent);
+}
+:root[data-hyb-active] [data-hyb-answer-label] {
+  margin-block-end: 8px; color: var(--primary); font: 600 11px/16px var(--font-sans);
+  letter-spacing: .035em;
+}
+:root[data-hyb-active] [data-hyb-read-marker] {
+  display: flex; align-items: center; gap: 10px; margin-block: 14px 10px;
+  color: var(--subtle-foreground); font: 11px/16px var(--font-sans);
+}
+:root[data-hyb-active] [data-hyb-read-marker]::after {
+  content: ""; height: 1px; flex: 1; background: var(--border);
+}
+:root[data-hyb-active] [data-hyb-unread] { display: block; padding: 0; }
+:root[data-hyb-active] [data-hyb-unread] > span,
+:root[data-hyb-active] [data-hyb-unread] > [data-testid="thread-unread-divider"] { display: none; }
+:root[data-hyb-active] [data-hyb-unread] [data-hyb-read-marker] { text-transform: none; letter-spacing: normal; }
+:root[data-hyb-active][data-hyb-quiet="true"] [data-hyb-quiet] {
+  background: transparent; border-color: var(--border-hairline); border-inline-start-color: var(--border);
+  padding-block: 0; margin-block: 0;
+}
+:root[data-hyb-active][data-hyb-quiet="true"] [data-hyb-quiet] [data-hyb-header] {
+  min-height: 24px; padding-block: 0; opacity: .8;
+}
+:root[data-hyb-active][data-hyb-quiet="true"] [data-hyb-quiet]:hover [data-hyb-header],
+:root[data-hyb-active][data-hyb-quiet="true"] [data-hyb-quiet]:focus-within [data-hyb-header] { opacity: 1; }
+/* Native completed-turn headers already dim their contents. Apply dimming once. */
+:root[data-hyb-active] [data-hyb-kind="summary"] > div > div > [data-hyb-header] [class*="opacity-40"] { opacity: 1; }
+:root[data-hyb-active] [data-hyb-layer="assistant"] [data-markdown-preview] {
+  font-size: 15px; line-height: 1.6; color: var(--foreground);
+}
+:root[data-hyb-active] [data-hyb-answer-toggle] {
+  display: flex; align-items: center; gap: 10px; width: 100%; min-width: 0;
+  min-height: 32px; padding: 5px 8px; margin-block-end: 8px;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--secondary); color: var(--readback-foreground);
+  font: 12px/20px var(--font-sans); text-align: start; cursor: pointer;
+}
+:root[data-hyb-active] [data-hyb-answer-toggle]:hover { background: var(--state-hover); }
+:root[data-hyb-active] [data-hyb-answer-title] { flex: 0 0 auto; font-weight: 600; }
+:root[data-hyb-active] [data-hyb-answer-preview] {
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+:root[data-hyb-active][data-hyb-collapse-answers="true"] [data-hyb-answer-collapsed] {
+  margin-block-start: 4px; padding: 0; border: 0; background: transparent; box-shadow: none;
+}
+:root[data-hyb-active] [data-hyb-answer-collapsed] > :not([data-hyb-decoration]) { display: none; }
+:root[data-hyb-active] [data-hyb-answer-collapsed] > [data-hyb-answer-toggle] { margin: 0; }
+:root[data-hyb-active] [data-hyb-layer="action"] {
+  border: 1px solid var(--border-hairline); border-inline-start: 3px solid var(--hyb-color);
+  border-radius: var(--radius); background: var(--card);
+  padding: 3px 8px; min-width: 0; margin-block: 2px;
+}
+:root[data-hyb-active][data-hyb-rails="false"] [data-hyb-layer="action"] { border-inline-start: 1px solid var(--border-hairline); }
+:root[data-hyb-active] [data-hyb-header] {
+  display: flex; align-items: center; gap: 7px; min-height: 28px;
+  padding: 2px 0; font: 12px/20px var(--font-mono); color: var(--readback-foreground);
+}
+:root[data-hyb-active] [data-hyb-header] span { opacity: 1; }
+:root[data-hyb-active] [data-hyb-header] span:not([data-hyb-chip]):not([data-hyb-glyph]) {
+  color: var(--readback-foreground); font-size: inherit; line-height: inherit;
+}
+:root[data-hyb-active] [data-hyb-layer="action"] > div { opacity: 1; }
+:root[data-hyb-active] [data-hyb-header] [data-icon-root] { color: var(--hyb-color); }
+:root[data-hyb-active] [data-hyb-glyph] {
+  width: 16px; flex: 0 0 16px; text-align: center;
+  color: var(--hyb-color); background: var(--card); border-radius: 3px;
+  font: 600 13px/20px var(--font-mono);
+}
+:root[data-hyb-active] [data-hyb-chip] {
+  margin-inline-start: auto; flex: 0 0 auto; white-space: nowrap;
+  border: 1px solid var(--border); border-radius: 4px; padding: 0 6px;
+  color: var(--hyb-color); background: var(--card); font: 11px/18px var(--font-sans);
+}
+:root[data-hyb-active][data-hyb-chips="false"] [data-hyb-chip] { display: none; }
+:root[data-hyb-active] [data-hyb-state="running"] {
+  background: var(--state-active); border-block-color: var(--border);
+}
+:root[data-hyb-active] [data-hyb-state="running"] > div > [data-hyb-header],
+:root[data-hyb-active] [data-hyb-state="running"] > div > div > [data-hyb-header] { font-weight: 600; }
+:root[data-hyb-active] [data-hyb-state="error"] { border-color: var(--hyb-color); }
+:root[data-hyb-active] [data-hyb-kind="think"] [data-markdown-preview] {
+  font-size: 14px; line-height: 22px; font-style: normal; color: var(--readback-foreground);
+}
+:root[data-hyb-active] [data-hyb-thought] {
+  font-size: 14px; line-height: 22px; font-style: normal; color: var(--hyb-color);
+  padding: 6px 10px 10px; border-color: var(--border-seam); background: var(--card);
+}
+:root[data-hyb-active][data-hyb-mono="true"] [data-hyb-thought] { font-family: var(--font-mono); }
+:root[data-hyb-active][data-hyb-mono="false"] [data-hyb-thought],
+:root[data-hyb-active][data-hyb-mono="false"] [data-hyb-kind="think"] [data-hyb-header] { font-family: var(--font-sans); }
+:root[data-hyb-active][data-hyb-mono="true"] [data-hyb-kind="think"] [data-markdown-preview],
+:root[data-hyb-active][data-hyb-mono="true"] [data-hyb-kind="think"] [data-markdown-preview] p {
+  font-family: var(--font-mono); font-style: normal;
+}
+:root[data-hyb-active][data-hyb-mono="false"] [data-hyb-kind="think"] [data-markdown-preview],
+:root[data-hyb-active][data-hyb-mono="false"] [data-hyb-kind="think"] [data-markdown-preview] p {
+  font-family: var(--font-sans); font-style: normal;
+}
+:root[data-hyb-active] [data-app-composer] [data-promptbox] {
+  border: 1px solid var(--input); background: var(--card); border-radius: var(--radius);
+  outline: none; box-shadow: none;
+}
+:root[data-hyb-active] [data-app-composer] [data-promptbox]:focus-within {
+  border-color: color-mix(in srgb, var(--border) 88%, var(--ink)); outline: none; box-shadow: none;
+}
+/* The editor and its layout wrappers are not independent Tab controls. */
+:root[data-hyb-active] [data-promptbox-editor-content],
+:root[data-hyb-active] [data-promptbox-editor-content] [contenteditable],
+:root[data-hyb-active] [data-promptbox]:has([data-promptbox-editor-content]) :has([data-promptbox-editor-content]) {
+  outline: none; box-shadow: none;
+}
+:root[data-hyb-active] [data-promptbox-action-row] button,
+:root[data-hyb-active] [data-hyb-settings] button,
+:root[data-hyb-active] section[aria-label="Child threads"] button {
+  border: 1px solid var(--border); background: var(--secondary); border-radius: var(--radius);
+  color: var(--foreground);
+}
+:root[data-hyb-active] [data-promptbox-action-row] button:hover,
+:root[data-hyb-active] [data-hyb-settings] button:hover,
+:root[data-hyb-active] section[aria-label="Child threads"] button:hover {
+  background: var(--state-hover);
+}
+:root[data-hyb-active] [data-promptbox-submit-action] {
+  background: var(--primary) !important; color: var(--primary-foreground) !important;
+  border-color: var(--primary) !important; font-weight: 600;
+}
+:root[data-hyb-active] [data-testid="app-sidebar-body"] { background: var(--sidebar); }
+:root[data-hyb-active] [data-sidebar-project-id] { border-color: var(--sidebar-border); }
+/* Native status nodes only. Row layout and avatars belong to the neighbour. */
+:root[data-hyb-active][data-hyb-statuses="true"] [data-sidebar-rename-row] [aria-label="Thread working"],
+:root[data-hyb-active][data-hyb-statuses="true"] [data-sidebar-rename-row] [aria-label="Thread working with unsubmitted draft"],
+:root[data-hyb-active][data-hyb-statuses="true"] [data-sidebar-rename-row] [aria-label="Workflow running"],
+:root[data-hyb-active][data-hyb-statuses="true"] [data-sidebar-rename-row] [aria-label="Background agent running"],
+:root[data-hyb-active][data-hyb-statuses="true"] [data-sidebar-rename-row] [aria-label="Background command running"] { color: var(--hyb-state-working); }
+:root[data-hyb-active][data-hyb-statuses="true"] [data-sidebar-rename-row] [aria-label="Thread needs user input"] {
+  color: var(--hyb-state-waiting); width: 18px; height: 18px;
+  border-radius: 50%; background: color-mix(in srgb, var(--hyb-state-waiting) 16%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--hyb-state-waiting) 18%, transparent);
+}
+:root[data-hyb-active][data-hyb-statuses="true"] [data-sidebar-rename-row] [aria-label="Unread thread succeeded"] {
+  background: var(--hyb-state-review, var(--success)); width: 7px; height: 7px; border-radius: 2px;
+}
+:root[data-hyb-active][data-hyb-statuses="true"] [data-sidebar-rename-row] [aria-label="Unread thread failed"],
+:root[data-hyb-active][data-hyb-statuses="true"] [data-sidebar-rename-row] [aria-label="Queued message failed to send"] { color: var(--hyb-state-error); }
+:root[data-hyb-active] [data-testid="sidebar-footer-body"] { border-top: 1px solid var(--border-seam); }
+:root[data-hyb-active] [data-timeline-window-key^="divider:"] { color: var(--subtle-foreground); }
+:root[data-hyb-active] section[aria-label="Child threads"] {
+  border-inline-start: 3px solid var(--hyb-delegate); background: var(--secondary); border-radius: var(--radius);
+}
+:root[data-hyb-active][data-hyb-colorcode="false"] section[aria-label="Child threads"] { border-inline-start-color: var(--hyb-rail-neutral); }
+:root[data-hyb-active] button:focus-visible,
+:root[data-hyb-active] a:focus-visible,
+:root[data-hyb-active] [role="button"]:not(:has([data-promptbox-editor-content])):focus-visible,
+:root[data-hyb-active] input:focus-visible,
+:root[data-hyb-active] select:focus-visible,
+:root[data-hyb-active] summary:focus-visible,
+:root[data-hyb-active] [tabindex]:not([data-promptbox-editor-content]):not([data-promptbox-editor-content] *):not(:has([data-promptbox-editor-content])):focus-visible {
+  outline: 2px solid var(--ring); outline-offset: 2px;
+}
+:root[data-hyb-active][data-hyb-density="compact"] [data-hyb-layer="action"] { padding: 1px 6px; margin-block: 1px; }
+:root[data-hyb-active][data-hyb-density="compact"] [data-hyb-header] { min-height: 24px; padding-block: 0; font-size: 11.5px; }
+:root[data-hyb-active][data-hyb-density="compact"] [data-timeline-row-list="top-level"] { row-gap: 6px; }
+:root[data-hyb-active][data-hyb-density="compact"] [data-hyb-layer="user"] { padding-block: 6px; }
+@media (max-width: 640px) {
+  :root[data-hyb-active] [data-hyb-chip] { max-width: 105px; overflow: hidden; text-overflow: ellipsis; }
+  :root[data-hyb-active] [data-hyb-header] { gap: 4px; }
+}
+
+/* bb намеренно выпускает широкие таблицы за колонку прозы: обёртка таблицы
+   имеет отрицательные margin-inline (-164px). На голом фоне это выглядит
+   нормально, но внутри карточки «Ответ» таблица вылезает за её рамку и
+   перекрывает рельсу. Внутри наших карточек этот full-bleed отключаем —
+   таблица остаётся внутри и скроллится своей родной обёрткой. */
+:root[data-hyb-active] [data-hyb-final],
+:root[data-hyb-active] [data-hyb-layer="speech"],
+:root[data-hyb-active] [data-hyb-current] {
+  min-width: 0;
+}
+:root[data-hyb-active] [data-hyb-final] [data-markdown-preview],
+:root[data-hyb-active] [data-hyb-layer="speech"] [data-markdown-preview],
+:root[data-hyb-active] [data-hyb-current] [data-markdown-preview] {
+  min-width: 0; max-width: 100%;
+}
+:root[data-hyb-active] [data-hyb-final] [data-markdown-preview] > *,
+:root[data-hyb-active] [data-hyb-layer="speech"] [data-markdown-preview] > *,
+:root[data-hyb-active] [data-hyb-current] [data-markdown-preview] > * {
+  margin-inline: 0 !important; max-width: 100% !important;
+}
+:root[data-hyb-active] [data-hyb-final] [data-markdown-preview] pre,
+:root[data-hyb-active] [data-hyb-layer="speech"] [data-markdown-preview] pre,
+:root[data-hyb-active] [data-hyb-current] [data-markdown-preview] pre {
+  max-width: 100%; overflow-x: auto;
+}
